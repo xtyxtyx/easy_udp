@@ -14,7 +14,6 @@ start_server() async {
   // Note that you can also manually create a RawDatagramSocket 
   // and pass it to EasyUDPSocket(..) to create a EasyUDPSocket.
   final socket = await EasyUDPSocket.bind('localhost', 7777);
-  print(socket.rawSocket.port);
 
   while (true) {
     // Rather than subscribing to a stream of RawSocketEvents and
@@ -49,6 +48,18 @@ main() async {
   start_client(8002);
   start_client(8003);
 }
+
+// Output:
+//
+// Server received: ping from 8001
+// Server received: ping from 8002
+// Server received: ping from 8003
+// Client 8001 received: pong
+// Client 8002 received: pong
+// Client 8003 received: pong
+// Client 8001 closed
+// Client 8002 closed
+// Client 8003 closed
 
 ```
 
