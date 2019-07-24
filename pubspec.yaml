@@ -2,7 +2,7 @@ name: easy_udp
 description: >
   This library provides a wrapper over RawDatagramSocket
   to make life easier.
-version: 0.1.0
+version: 0.1.0+1
 homepage: https://github.com//xtyxtyx/easy_udp
 author: xuty <xty50337@hotmail.com>
 
