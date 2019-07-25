@@ -33,15 +33,13 @@ class EasyUDPSocket {
     return rawSocket.receive();
   }
 
-  /// send some data using this socket.
-  int send(List<int> buffer, dynamic address, int port) {
+  /// send some data with this socket.
+  Future<int> send(List<int> buffer, dynamic address, int port) async {
     InternetAddress addr;
     if (address is InternetAddress) {
       addr = address;
-    } else if (address == 'localhost') {
-      addr = InternetAddress.loopbackIPv4;
     } else if (address is String) {
-      addr = InternetAddress(address);
+      addr = (await InternetAddress.lookup(address))[0];
     } else {
       throw 'address must be either an InternetAddress or a String';
     }
@@ -51,7 +49,7 @@ class EasyUDPSocket {
   /// use `sendBack` to send message to where a Datagram comes from.
   /// This is a shorthand of socket.send(somedata, datagram.address, datagram.port);
   int sendBack(Datagram datagram, List<int> buffer) {
-    return send(buffer, datagram.address, datagram.port);
+    return rawSocket.send(buffer, datagram.address, datagram.port);
   }
 
   /// close the socket.
