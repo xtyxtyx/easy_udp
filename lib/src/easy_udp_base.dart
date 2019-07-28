@@ -43,9 +43,7 @@ class EasyUDPSocket {
       if (!completer.isCompleted) {
         await _eventQueue.next;
         completer.complete(rawSocket.receive());
-        return true;
       }
-      return false;
     });
     return completer.future;
   }
