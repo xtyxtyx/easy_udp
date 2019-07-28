@@ -1,5 +1,9 @@
-This library provides a wrapper over RawDatagramSocket
-to make life easier.
+
+## Features
+
+- receive Datagrams on demand without subscription.
+- receive timeout.
+- Various shorthand methods.
 
 ## Usage
 
@@ -60,6 +64,34 @@ main() async {
 // Client 8001 closed
 // Client 8002 closed
 // Client 8003 closed
+
+```
+
+with timeout:
+```dart
+...
+final datagram = await socket.receive(timeout: 1000);
+if(datagram == null) {
+  print('Receive timeout');
+  continue;
+}
+...
+
+// Output:
+//
+// Server received: ping from 8001
+// Server received: ping from 8002
+// Server received: ping from 8003
+// Client 8001 received: pong
+// Client 8002 received: pong
+// Client 8003 received: pong
+// Client 8001 closed
+// Client 8002 closed
+// Client 8003 closed
+// Receive timeout
+// Receive timeout
+// Receive timeout
+// Receive timeout
 
 ```
 

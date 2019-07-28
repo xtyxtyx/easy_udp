@@ -6,14 +6,17 @@ start_server() async {
   // Note that you can also manually create a RawDatagramSocket 
   // and pass it to EasyUDPSocket(..) to create a EasyUDPSocket.
   final socket = await EasyUDPSocket.bind('localhost', 7777);
-  print(socket.rawSocket.port);
 
   while (true) {
     // Rather than subscribing to a stream of RawSocketEvents and
     // calling receive in the callback, which is the case when using
     // RawDatagramSocket, with EasyUDPSocket, you can get Datagram 
     // on demand with `receive` method.
-    final datagram = await socket.receive();
+    final datagram = await socket.receive(timeout: 1000);
+    if(datagram == null) {
+      print('Receive timeout');
+      continue;
+    }
     print('Server received: ${ascii.decode(datagram.data)} from ${datagram.port}');
 
     // use `sendBack` to send message to where a Datagram comes from.
@@ -25,7 +28,7 @@ start_server() async {
 
 start_client(int port) async {
   final socket = await EasyUDPSocket.bind('localhost', port);
-  socket.send(ascii.encode('ping'), 'localhost', 7777);
+  await socket.send(ascii.encode('ping'), 'localhost', 7777);
   final resp = await socket.receive();
   print('Client $port received: ${ascii.decode(resp.data)}');
 

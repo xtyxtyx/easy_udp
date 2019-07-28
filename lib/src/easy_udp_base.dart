@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:async/async.dart';
 
@@ -26,11 +27,27 @@ class EasyUDPSocket {
   }
 
   /// receive a Datagram from the socket.
-  Future<Datagram> receive() async {
-    while ((await _eventQueue.next) != RawSocketEvent.read) {
-      continue;
+  Future<Datagram> receive({int timeout}) {
+    final completer = Completer<Datagram>.sync();
+    if (timeout != null) {
+      Future.delayed(Duration(milliseconds: timeout)).then((_) {
+        if(!completer.isCompleted) {
+          completer.complete(null);
+        }
+      });
     }
-    return rawSocket.receive();
+    Future.microtask(() async {
+      while ((await _eventQueue.peek) != RawSocketEvent.read) {
+        await _eventQueue.next;
+      }
+      if(!completer.isCompleted) {
+        await _eventQueue.next;
+        completer.complete(rawSocket.receive());
+        return true;
+      }
+      return false;
+    });
+    return completer.future;
   }
 
   /// send some data with this socket.

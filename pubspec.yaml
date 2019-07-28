@@ -1,8 +1,8 @@
 name: easy_udp
 description: >
   This library provides a wrapper over RawDatagramSocket
-  to make life easier.
-version: 1.0.0
+  to gracefully handle UDP connections in dartlang. 😆
+version: 1.1.0
 homepage: https://github.com//xtyxtyx/easy_udp
 author: xuty <xty50337@hotmail.com>
 
