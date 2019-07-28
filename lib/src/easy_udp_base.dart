@@ -31,7 +31,7 @@ class EasyUDPSocket {
     final completer = Completer<Datagram>.sync();
     if (timeout != null) {
       Future.delayed(Duration(milliseconds: timeout)).then((_) {
-        if(!completer.isCompleted) {
+        if (!completer.isCompleted) {
           completer.complete(null);
         }
       });
@@ -40,7 +40,7 @@ class EasyUDPSocket {
       while ((await _eventQueue.peek) != RawSocketEvent.read) {
         await _eventQueue.next;
       }
-      if(!completer.isCompleted) {
+      if (!completer.isCompleted) {
         await _eventQueue.next;
         completer.complete(rawSocket.receive());
         return true;
